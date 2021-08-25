@@ -17,11 +17,11 @@ public class JVSideMenu: NSObject {
     
     // used for view transition after selected an item
     var rootViewController: UIViewController!
-    var coverMaskView: UIView = UIView()
+    private var coverMaskView: UIView = UIView()
     
     // --- left menu
     var leftMenuController: UIViewController?
-    var leftMenuConstraint: NSLayoutConstraint?
+    private var leftMenuConstraint: NSLayoutConstraint?
     
     var maxLeftWidth: CGFloat = 0.8
     var absoluteLeftWidth: CGFloat {
@@ -29,13 +29,13 @@ public class JVSideMenu: NSObject {
     }
     
     // --- right menu
-    var rightMenuController: UIViewController?
-    var rightMenuContraint: NSLayoutConstraint?
+//    var rightMenuController: UIViewController?
+//    var rightMenuContraint: NSLayoutConstraint?
     
-    var maxRightWidth: CGFloat = 0.8
-    var absoluteRightWidth: CGFloat {
-        return UIScreen.main.bounds.width * maxRightWidth
-    }
+//    var maxRightWidth: CGFloat = 0.8
+//    var absoluteRightWidth: CGFloat {
+//        return UIScreen.main.bounds.width * maxRightWidth
+//    }
     
     // option
     var isGestureEnabled: Bool = true {
@@ -72,15 +72,15 @@ public class JVSideMenu: NSObject {
     }
     
     
-    public func setup(rightMenu:UIViewController, rootController:UIViewController) {
-        self.rootViewController = rootController
-        self.window?.addSubview(rightMenu.view)
-        
-        self.rightMenuController = rightMenu
-        self.constraintForRight()
-        
-        self.setupCoverView()
-    }
+//    public func setup(rightMenu:UIViewController, rootController:UIViewController) {
+//        self.rootViewController = rootController
+//        self.window?.addSubview(rightMenu.view)
+//
+//        self.rightMenuController = rightMenu
+//        self.constraintForRight()
+//
+//        self.setupCoverView()
+//    }
     
     private func setupCoverView() {
         // hide mask view from being interacted
@@ -94,11 +94,13 @@ public class JVSideMenu: NSObject {
     }
     
     // MARK: Gesture Recognizer
-    @objc private func didTapOnMaskView() {
+    @objc
+    private func didTapOnMaskView() {
         self.closeLeft{}
     }
     
-    @objc private func panningView(recognizer:UIPanGestureRecognizer) {
+    @objc
+    private func panningView(recognizer:UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
             handlePanningTransition(x: recognizer.translation(in: self.window).x, constraint:self.leftMenuConstraint!)
@@ -199,12 +201,12 @@ public class JVSideMenu: NSObject {
                                                   attributeItem: .leading)
     }
     
-    private func constraintForRight() {
-        self.rightMenuContraint = self.constraint(view: self.rightMenuController!.view,
-                                                  superView: self.rightMenuController!.view.superview!,
-                                                  width: self.absoluteRightWidth,
-                                                  attributeItem: .trailing)
-    }
+//    private func constraintForRight() {
+//        self.rightMenuContraint = self.constraint(view: self.rightMenuController!.view,
+//                                                  superView: self.rightMenuController!.view.superview!,
+//                                                  width: self.absoluteRightWidth,
+//                                                  attributeItem: .trailing)
+//    }
     
     private func constraint(view:UIView, superView:UIView, width:CGFloat, attributeItem:NSLayoutConstraint.Attribute) -> NSLayoutConstraint {
         view.translatesAutoresizingMaskIntoConstraints = false
