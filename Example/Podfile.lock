@@ -1,0 +1,16 @@
+PODS:
+  - JVSideMenu (0.1.0)
+
+DEPENDENCIES:
+  - JVSideMenu (from `../`)
+
+EXTERNAL SOURCES:
+  JVSideMenu:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  JVSideMenu: 3858be5c96925ed0382339b4f445752d33308003
+
+PODFILE CHECKSUM: 3a0bd6338f51fe8656e1cabf0db657e33ca53e38
+
+COCOAPODS: 1.10.1

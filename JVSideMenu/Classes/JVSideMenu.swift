@@ -1,6 +1,5 @@
 //
 //  JVSideMenu.swift
-//  v1.0
 //
 //  Created by Vithiea Hor on 11/29/19.
 //  Copyright © 2019 John-Vithiea. All rights reserved.
@@ -8,37 +7,29 @@
 
 import UIKit
 
+
 public enum JVSideMenuState {
     case opened
     case closed
 }
 
-public class JVSideMenu: NSObject {
+open class JVSideMenu: NSObject {
     
     // used for view transition after selected an item
-    var rootViewController: UIViewController!
+    public var rootViewController: UIViewController!
     private var coverMaskView: UIView = UIView()
     
     // --- left menu
-    var leftMenuController: UIViewController?
+    public var leftMenuController: UIViewController?
     private var leftMenuConstraint: NSLayoutConstraint?
     
-    var maxLeftWidth: CGFloat = 0.8
-    var absoluteLeftWidth: CGFloat {
+    public var maxLeftWidth: CGFloat = 0.8
+    public var absoluteLeftWidth: CGFloat {
         return UIScreen.main.bounds.width * maxLeftWidth
     }
     
-    // --- right menu
-//    var rightMenuController: UIViewController?
-//    var rightMenuContraint: NSLayoutConstraint?
-    
-//    var maxRightWidth: CGFloat = 0.8
-//    var absoluteRightWidth: CGFloat {
-//        return UIScreen.main.bounds.width * maxRightWidth
-//    }
-    
     // option
-    var isGestureEnabled: Bool = true {
+    public var isGestureEnabled: Bool = true {
         didSet {
             panGesture.isEnabled = isGestureEnabled
         }
@@ -70,17 +61,6 @@ public class JVSideMenu: NSObject {
         
         self.setupCoverView()
     }
-    
-    
-//    public func setup(rightMenu:UIViewController, rootController:UIViewController) {
-//        self.rootViewController = rootController
-//        self.window?.addSubview(rightMenu.view)
-//
-//        self.rightMenuController = rightMenu
-//        self.constraintForRight()
-//
-//        self.setupCoverView()
-//    }
     
     private func setupCoverView() {
         // hide mask view from being interacted
@@ -154,16 +134,25 @@ public class JVSideMenu: NSObject {
         }
     }
     
-    public func openLeft(_ completed:@escaping()->Void) {
-        self.openMenu(constraint: self.leftMenuConstraint!, completed: {
-            self.leftState = .opened
-        })
+    public func openLeft(_ completed:(()->Void)?) {
+        if let leftMenu = self.leftMenuConstraint {
+            self.openMenu(constraint: leftMenu, completed: {
+                self.leftState = .opened
+                
+                if let handler = completed {
+                    handler()
+                }
+            })
+        }
     }
     
-    public func closeLeft(_ completed:@escaping()->Void) {
+    public func closeLeft(_ completed:(()->Void)?) {
         self.closeMenu(constraint: self.leftMenuConstraint!, constant: -self.absoluteLeftWidth, completed: {
             self.leftState = .closed
-            completed()
+            
+            if let handler = completed {
+                handler()
+            }
         })
     }
     
@@ -200,13 +189,6 @@ public class JVSideMenu: NSObject {
                                                   width: self.absoluteLeftWidth,
                                                   attributeItem: .leading)
     }
-    
-//    private func constraintForRight() {
-//        self.rightMenuContraint = self.constraint(view: self.rightMenuController!.view,
-//                                                  superView: self.rightMenuController!.view.superview!,
-//                                                  width: self.absoluteRightWidth,
-//                                                  attributeItem: .trailing)
-//    }
     
     private func constraint(view:UIView, superView:UIView, width:CGFloat, attributeItem:NSLayoutConstraint.Attribute) -> NSLayoutConstraint {
         view.translatesAutoresizingMaskIntoConstraints = false

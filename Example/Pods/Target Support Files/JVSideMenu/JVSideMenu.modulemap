@@ -1,0 +1,6 @@
+framework module JVSideMenu {
+  umbrella header "JVSideMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}
