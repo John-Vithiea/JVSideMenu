@@ -1,9 +1,28 @@
-//
-//  JVSideMenu.swift
-//
-//  Created by Vithiea Hor on 11/29/19.
-//  Copyright © 2019 John-Vithiea. All rights reserved.
-//
+/*
+ * JVDatePickerView
+ * v1.0
+ *
+ * Copyright (c) 2021 Vithiea Hor (John)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 
 import UIKit
 
@@ -15,7 +34,7 @@ public enum JVSideMenuState {
 
 open class JVSideMenu: NSObject {
     
-    // used for view transition after selected an item
+    /// The controller that used to animate Menu
     public var rootViewController: UIViewController!
     private var coverMaskView: UIView = UIView()
     
@@ -51,7 +70,7 @@ open class JVSideMenu: NSObject {
     public static let shared = JVSideMenu()
     private override init() {}
     
-    public func setup(leftMenu:UIViewController, rootController:UIViewController) {
+    public func set(leftMenu:UIViewController, rootController:UIViewController) {
         self.rootViewController = rootController
         self.window?.addSubview(leftMenu.view)
         
@@ -74,13 +93,11 @@ open class JVSideMenu: NSObject {
     }
     
     // MARK: Gesture Recognizer
-    @objc
-    private func didTapOnMaskView() {
-        self.closeLeft{}
+    @objc private func didTapOnMaskView() {
+        self.closeLeft(completion: nil)
     }
     
-    @objc
-    private func panningView(recognizer:UIPanGestureRecognizer) {
+    @objc private func panningView(recognizer:UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
             handlePanningTransition(x: recognizer.translation(in: self.window).x, constraint:self.leftMenuConstraint!)
@@ -96,9 +113,9 @@ open class JVSideMenu: NSObject {
     private func handlePanningEnd() {
         switch self.leftState {
         case .opened:
-            if self.leftMenuConstraint!.constant <= (-self.absoluteLeftWidth/2) {self.closeLeft{}} else {self.openLeft{}}
+            if self.leftMenuConstraint!.constant <= (-self.absoluteLeftWidth/2) {self.closeLeft(completion:nil)} else {self.openLeft(completion:nil)}
         case .closed:
-            if self.leftMenuConstraint!.constant >= (-self.absoluteLeftWidth/2) {self.openLeft{}} else {self.closeLeft{}}
+            if self.leftMenuConstraint!.constant >= (-self.absoluteLeftWidth/2) {self.openLeft(completion:nil)} else {self.closeLeft(completion:nil)}
         }
     }
     
@@ -127,30 +144,30 @@ open class JVSideMenu: NSObject {
     public func push(_ controller: UIViewController) {
         self.closeLeft {
             if self.rootViewController.isKind(of: UIViewController.self) {
-                (self.rootViewController as! UINavigationController).pushViewController(controller, animated: true)
-            }else{
                 self.rootViewController.navigationController?.pushViewController(controller, animated: true)
+            }else{
+                (self.rootViewController as! UINavigationController).pushViewController(controller, animated: true)
             }
         }
     }
     
-    public func openLeft(_ completed:(()->Void)?) {
+    public func openLeft(completion:(()->Void)?) {
         if let leftMenu = self.leftMenuConstraint {
             self.openMenu(constraint: leftMenu, completed: {
                 self.leftState = .opened
                 
-                if let handler = completed {
+                if let handler = completion {
                     handler()
                 }
             })
         }
     }
     
-    public func closeLeft(_ completed:(()->Void)?) {
+    public func closeLeft(completion:(()->Void)?) {
         self.closeMenu(constraint: self.leftMenuConstraint!, constant: -self.absoluteLeftWidth, completed: {
             self.leftState = .closed
             
-            if let handler = completed {
+            if let handler = completion {
                 handler()
             }
         })

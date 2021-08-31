@@ -31,8 +31,7 @@ class LeftMenuTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let vcToPush = storyboard.instantiateViewController(withIdentifier: "itemDetailScreen")
+        let vcToPush = self.storyboard!.instantiateViewController(withIdentifier: "itemDetailScreen")
         JVSideMenu.shared.push(vcToPush)
     }
 }

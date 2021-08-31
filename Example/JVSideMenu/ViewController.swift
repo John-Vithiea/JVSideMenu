@@ -28,11 +28,10 @@ class ViewController: UIViewController {
     
     private func setupLeftSideMenu() {
         let vc = self.storyboard!.instantiateViewController(withIdentifier: "LeftMenuTableViewController")
-        JVSideMenu.shared.setup(leftMenu: vc, rootController: self.navigationController!)
-        
+        JVSideMenu.shared.set(leftMenu: vc, rootController: self)
     }
     
     @IBAction func leftSideMenuAction() {
-        JVSideMenu.shared.openLeft(nil)
+        JVSideMenu.shared.openLeft(completion: nil)
     }
 }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5306884726D7241F009B5A20 /* LeftMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306884626D7241F009B5A20 /* LeftMenuTableViewController.swift */; };
-		5306885D26D741D8009B5A20 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306885C26D741D8009B5A20 /* BaseController.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -30,10 +29,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2A744F7D4B6F37308F89F158 /* JVSideMenu.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JVSideMenu.podspec; path = ../JVSideMenu.podspec; sourceTree = "<group>"; };
+		2A744F7D4B6F37308F89F158 /* JVSideMenu.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JVSideMenu.podspec; path = ../JVSideMenu.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		3953DA0FEF94C2323F39FA2F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		5306884626D7241F009B5A20 /* LeftMenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuTableViewController.swift; sourceTree = "<group>"; };
-		5306885C26D741D8009B5A20 /* BaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
 		55B304906F4531B8D6F9D575 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		56BC032D08314C7ACD39F3FF /* Pods-JVSideMenu_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JVSideMenu_Example.debug.xcconfig"; path = "Target Support Files/Pods-JVSideMenu_Example/Pods-JVSideMenu_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		5E9FADFF24A50BBB39D4C272 /* Pods-JVSideMenu_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JVSideMenu_Tests.release.xcconfig"; path = "Target Support Files/Pods-JVSideMenu_Tests/Pods-JVSideMenu_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				5306884626D7241F009B5A20 /* LeftMenuTableViewController.swift */,
-				5306885C26D741D8009B5A20 /* BaseController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -339,7 +336,6 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				5306885D26D741D8009B5A20 /* BaseController.swift in Sources */,
 				5306884726D7241F009B5A20 /* LeftMenuTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
