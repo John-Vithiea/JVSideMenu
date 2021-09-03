@@ -143,10 +143,10 @@ open class JVSideMenu: NSObject {
     // MARK: Transitions
     public func push(_ controller: UIViewController) {
         self.closeLeft {
-            if self.rootViewController.isKind(of: UIViewController.self) {
-                self.rootViewController.navigationController?.pushViewController(controller, animated: true)
-            }else{
+            if (self.rootViewController.isKind(of: UINavigationController.self)){
                 (self.rootViewController as! UINavigationController).pushViewController(controller, animated: true)
+            } else if (self.rootViewController.isKind(of: UIViewController.self)){
+                self.rootViewController.navigationController?.pushViewController(controller, animated: true)
             }
         }
     }
