@@ -85,8 +85,11 @@ open class JVSideMenu: NSObject {
         // hide mask view from being interacted
         self.coverMaskView.isHidden = true
         self.coverMaskView.backgroundColor = UIColor.black.withAlphaComponent(0)
-        self.rootViewController.view.addSubview(self.coverMaskView)
+        self.window?.addSubview(self.coverMaskView)
         self.fillParent(subview: self.coverMaskView)
+        if let leftmenu = self.leftMenuController?.view {
+            self.window?.bringSubviewToFront(leftmenu)
+        }
         
         self.window?.addGestureRecognizer(panGesture)
         self.coverMaskView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapOnMaskView)))
