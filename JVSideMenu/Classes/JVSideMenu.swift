@@ -1,5 +1,5 @@
 /*
- * JVDatePickerView
+ * JVSideMenu
  * v1.0
  *
  * Copyright (c) 2021 Vithiea Hor (John)
@@ -87,12 +87,16 @@ open class JVSideMenu: NSObject {
         self.coverMaskView.backgroundColor = UIColor.black.withAlphaComponent(0)
         self.window?.addSubview(self.coverMaskView)
         self.fillParent(subview: self.coverMaskView)
-        if let leftmenu = self.leftMenuController?.view {
-            self.window?.bringSubviewToFront(leftmenu)
-        }
         
         self.window?.addGestureRecognizer(panGesture)
         self.coverMaskView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapOnMaskView)))
+        
+        DispatchQueue.main.async {
+            self.window?.bringSubviewToFront(self.coverMaskView)
+            if let leftmenu = self.leftMenuController?.view {
+                self.window?.bringSubviewToFront(leftmenu)
+            }
+        }
     }
     
     // MARK: Gesture Recognizer
@@ -145,18 +149,36 @@ open class JVSideMenu: NSObject {
     
     // MARK: Transitions
     public func push(_ controller: UIViewController) {
-        self.closeLeft {
+        self.closeLeft { [weak self] in
+            guard let self = self else { return }
             if (self.rootViewController.isKind(of: UINavigationController.self)){
                 (self.rootViewController as! UINavigationController).pushViewController(controller, animated: true)
-            } else if (self.rootViewController.isKind(of: UIViewController.self)){
+            } else if (self.rootViewController.isKind(of: UITabBarController.self)) {
+                handleTabBar(tabbarVC: self.rootViewController as! UITabBarController)
+            } else {
                 self.rootViewController.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+        
+        func handleTabBar(tabbarVC: UITabBarController) {
+            if let navigation = tabbarVC.navigationController {
+                navigation.pushViewController(controller, animated: true)
+                return
+            }
+            
+            guard let selectedVC = tabbarVC.selectedViewController else { return }
+            if selectedVC.isKind(of: UINavigationController.self) {
+                (selectedVC as! UINavigationController).pushViewController(controller, animated: true)
+            } else {
+                selectedVC.navigationController?.pushViewController(controller, animated: true)
             }
         }
     }
     
     public func openLeft(completion:(()->Void)?) {
         if let leftMenu = self.leftMenuConstraint {
-            self.openMenu(constraint: leftMenu, completed: {
+            self.openMenu(constraint: leftMenu, completed: { [weak self] in
+                guard let self = self else { return }
                 self.leftState = .opened
                 
                 if let handler = completion {
@@ -167,7 +189,8 @@ open class JVSideMenu: NSObject {
     }
     
     public func closeLeft(completion:(()->Void)?) {
-        self.closeMenu(constraint: self.leftMenuConstraint!, constant: -self.absoluteLeftWidth, completed: {
+        self.closeMenu(constraint: self.leftMenuConstraint!, constant: -self.absoluteLeftWidth, completed: { [weak self] in
+            guard let self = self else { return }
             self.leftState = .closed
             
             if let handler = completion {
