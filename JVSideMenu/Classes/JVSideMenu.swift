@@ -41,8 +41,9 @@ open class JVSideMenu: NSObject {
     // --- left menu
     public var leftMenuController: UIViewController?
     private var leftMenuConstraint: NSLayoutConstraint?
+    private var leftMenuWidthConstraint: NSLayoutConstraint?
     
-    public var maxLeftWidth: CGFloat = 0.8
+    public var maxLeftWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 0.5 : 0.8
     public var absoluteLeftWidth: CGFloat {
         return UIScreen.main.bounds.width * maxLeftWidth
     }
@@ -199,6 +200,10 @@ open class JVSideMenu: NSObject {
         })
     }
     
+    public func invalidateLayout() {
+        self.leftMenuWidthConstraint?.constant = self.absoluteLeftWidth
+    }
+    
     private func openMenu(constraint:NSLayoutConstraint, completed:@escaping()->Void) {
         UIView.animate(withDuration: self.transitionDuration, animations: {
             constraint.constant = 0
@@ -237,11 +242,16 @@ open class JVSideMenu: NSObject {
         view.translatesAutoresizingMaskIntoConstraints = false
         superView.addConstraint(NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: superView, attribute: .top, multiplier: 1.0, constant: 0))
         superView.addConstraint(NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: superView, attribute: .bottom, multiplier: 1.0, constant: 0))
-        superView.addConstraint(NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width))
+//        superView.addConstraint(NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width))
         
         // this constraint would be Leading or Trailing
         let constraint = NSLayoutConstraint(item: view, attribute: attributeItem, relatedBy: .equal, toItem: superView, attribute: attributeItem, multiplier: 1.0, constant: -width)
         superView.addConstraint(constraint)
+        
+        // update constrant value on device orientation
+        let widthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width)
+        superView.addConstraint(widthConstraint)
+        self.leftMenuWidthConstraint = widthConstraint
         
         // return back to caller to store in property for later use in Transitions section
         return constraint

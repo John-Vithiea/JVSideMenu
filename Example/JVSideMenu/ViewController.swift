@@ -34,4 +34,11 @@ class ViewController: UIViewController {
     @IBAction func leftSideMenuAction() {
         JVSideMenu.shared.openLeft(completion: nil)
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate { _ in
+            JVSideMenu.shared.invalidateLayout()
+        }
+    }
 }
