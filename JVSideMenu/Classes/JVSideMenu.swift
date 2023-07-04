@@ -43,7 +43,7 @@ open class JVSideMenu: NSObject {
     private var leftMenuConstraint: NSLayoutConstraint?
     private var leftMenuWidthConstraint: NSLayoutConstraint?
     
-    public var maxLeftWidth: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 0.5 : 0.8
+    public var maxLeftWidth: CGFloat = 0.8
     public var absoluteLeftWidth: CGFloat {
         return UIScreen.main.bounds.width * maxLeftWidth
     }
@@ -75,6 +75,7 @@ open class JVSideMenu: NSObject {
         self.rootViewController = rootController
         self.window?.addSubview(leftMenu.view)
         
+        maxLeftWidth = getWidth()
         self.leftMenuController = leftMenu
         self.constraintForLeft()
         self.leftState = .closed
@@ -98,6 +99,13 @@ open class JVSideMenu: NSObject {
                 self.window?.bringSubviewToFront(leftmenu)
             }
         }
+    }
+    
+    private func getWidth() -> CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return UIScreen.main.bounds.width <= 1000 ? 0.65 : 0.5
+        }
+        return 0.8
     }
     
     // MARK: Gesture Recognizer
@@ -201,6 +209,7 @@ open class JVSideMenu: NSObject {
     }
     
     public func invalidateLayout() {
+        self.maxLeftWidth = self.getWidth()
         self.leftMenuWidthConstraint?.constant = self.absoluteLeftWidth
     }
     
