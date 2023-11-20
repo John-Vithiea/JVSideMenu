@@ -41,7 +41,7 @@ open class JVSideMenu: NSObject {
     // --- left menu
     public var leftMenuController: UIViewController?
     private var leftMenuConstraint: NSLayoutConstraint?
-    private var leftMenuWidthConstraint: NSLayoutConstraint?
+    private var sideMenuWidthConstraint: NSLayoutConstraint?
     
     public var maxLeftWidth: CGFloat = 0.8
     public var absoluteLeftWidth: CGFloat {
@@ -210,7 +210,10 @@ open class JVSideMenu: NSObject {
     
     public func invalidateLayout() {
         self.maxLeftWidth = self.getWidth()
-        self.leftMenuWidthConstraint?.constant = self.absoluteLeftWidth
+        self.sideMenuWidthConstraint?.constant = self.absoluteLeftWidth
+        if self.leftState == .closed {
+            self.leftMenuConstraint?.constant = -self.absoluteLeftWidth
+        }
     }
     
     private func openMenu(constraint:NSLayoutConstraint, completed:@escaping()->Void) {
@@ -248,22 +251,20 @@ open class JVSideMenu: NSObject {
     }
     
     private func constraint(view:UIView, superView:UIView, width:CGFloat, attributeItem:NSLayoutConstraint.Attribute) -> NSLayoutConstraint {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        superView.addConstraint(NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: superView, attribute: .top, multiplier: 1.0, constant: 0))
-        superView.addConstraint(NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: superView, attribute: .bottom, multiplier: 1.0, constant: 0))
-//        superView.addConstraint(NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width))
-        
         // this constraint would be Leading or Trailing
-        let constraint = NSLayoutConstraint(item: view, attribute: attributeItem, relatedBy: .equal, toItem: superView, attribute: attributeItem, multiplier: 1.0, constant: -width)
-        superView.addConstraint(constraint)
+        let leftOrRight = NSLayoutConstraint(item: view, attribute: attributeItem, relatedBy: .equal, toItem: superView, attribute: attributeItem, multiplier: 1.0, constant: -width)
+        self.sideMenuWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width)
         
-        // update constrant value on device orientation
-        let widthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: width)
-        superView.addConstraint(widthConstraint)
-        self.leftMenuWidthConstraint = widthConstraint
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: superView.topAnchor),
+            view.bottomAnchor.constraint(equalTo: superView.bottomAnchor),
+            leftOrRight,
+            self.sideMenuWidthConstraint!
+        ])
         
         // return back to caller to store in property for later use in Transitions section
-        return constraint
+        return leftOrRight
     }
     
     private func fillParent(subview:UIView) {
